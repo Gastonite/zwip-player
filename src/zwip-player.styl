@@ -1,0 +1,69 @@
+fit(topOffset = 0, bottomOffset = 0, leftOffset = 0, rightOffset = 0)
+  position absolute
+  bottom bottomOffset
+  top topOffset
+  left leftOffset
+  right rightOffset
+
+$dark ?= #50
+$light ?= #b9
+$border ?= 1px solid darken($dark, 50%)
+$toolbarHeight ?= 50px
+$buttonWidth ?= 70px
+$padding ?= 6px
+$leftWidth ?= $buttonWidth * 3
+*
+  box-sizing border-box
+
+zwip-player
+  fit()
+
+  h3
+    margin-top: 2em
+    &:first-child
+      margin-top: 0
+
+
+
+  pre
+    font-size: 12px
+    display inline
+    padding-left: 10px
+  .scene
+    fit(bottomOffset: $toolbarHeight)
+    background-color: $light
+    overflow auto
+  .left
+    fit(rightOffset: $leftWidth)
+  .toolbar
+    fit(topOffset: initial)
+    background-color $dark
+    padding $padding
+    height: $toolbarHeight
+    display flex
+  .right
+    fit(leftOffset: initial)
+    color $light
+    width $leftWidth
+    background-color $dark
+    margin 0
+    > :first-child
+      margin-top: $toolbarHeight
+      //font-size: 10px
+      padding: $padding + 6
+
+    .toolbar
+      fit(bottomOffset: initial)
+
+  button
+    width $buttonWidth
+    font-size 22px
+    margin-right 6px
+    background-color: $light
+    color $dark
+    border none
+    &:last-child
+      margin-right: 0
+    &:disabled
+      background-color: $dark
+      color $light
