@@ -21,12 +21,12 @@
     "incremental-dom": "^0.5.1",
     "klak": "^1.0.2",
     "object.assign": "^4.0.4",
-    "pwet": "^1.1.1",
+    "pwet": "Gastonite/pwet",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5",
-    "zwip": "^1.1.0"
+    "zwip": "Gastonite/zwip"
   },
   "scripts": {
     "demo": "webpack-dev-server --config examples/simple/webpack.config.js --progress --colors",

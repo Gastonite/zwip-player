@@ -1,6 +1,8 @@
 import { Animation, Loop } from 'zwip';
 import Component from 'pwet/src/component';
+import { object } from 'pwet/src/attribute';
 import { renderElement, renderStyle, renderStrong, renderH3, renderPre, renderDiv, renderButton } from 'idom-util';
+import { assert } from 'pwet/src/assertions';
 import { noop } from 'pwet/src/utilities';
 import { patch, text } from 'incremental-dom';
 
@@ -25,33 +27,10 @@ internal.renderObject = (object = {}) => {
       renderStrong(null, null, 'style', 'display:inline-block;width:90px', text.bind(null, key+':\t\t'));
       renderPre(text.bind(null, object[key]));
     });
-
   });
 };
 
-internal.defaults = {
-  makeAnimation(scene) {
-
-    const element = scene.firstChild;
-
-    const start = () => element.style.position = 'absolute';
-
-    const render = () => element.style.left = `${(animation.value * (scene.clientWidth - element.clientWidth - 2) )}px`;
-
-    const animation = Animation({ duration: 10000, start, render });
-
-    return animation;
-  },
-  renderScene() {
-
-    renderElement('h1', null, null, 'style', 'font-size:24px;', () => {
-      text('DEFAULT SCENE');
-    });
-
-  }
-};
-
-internal.Player = (element, { renderScene, makeAnimation } = internal.defaults) => {
+internal.Player = (element) => {
 
   let _loaded = false;
   let _animation = false;
@@ -65,20 +44,25 @@ internal.Player = (element, { renderScene, makeAnimation } = internal.defaults) 
 
   const _updateLoopState = () => {
 
-    element.loopState = Loop.state;
+    const state = element.state;
 
-    if (element.loopState.fps)
-      element.loopState.fps = Math.round(element.loopState.fps * 1000) / 1000;
+    const loopState = Loop.state;
+
+    if (loopState.fps)
+      loopState.fps = Math.round(loopState.fps * 1000) / 1000;
 
     let { value, nbFrames, duration, played, currentFrame } = _animation.state;
 
-    element.animationState = {
+    const animationState = {
       value: (!value ? 0 : Math.round(value * 100)) + '%',
       frames: `${currentFrame || 0}/${nbFrames}`,
       duration: `${played}/${duration}`,
     };
 
-    component.render();
+    element.state = Object.assign(state, {
+      loopState,
+      animationState
+    });
   };
 
   const _observer = new MutationObserver(() => {
@@ -88,7 +72,10 @@ internal.Player = (element, { renderScene, makeAnimation } = internal.defaults) 
 
     _loaded = true;
 
-    _animation = makeAnimation(element.querySelector('.scene'));
+    _animation = element.makeAnimation(element.querySelector('.scene'));
+
+    assert(Animation.isAnimation(_animation), `'makeAnimation' did not return a Zwip animation`);
+
     _playAnimation = () => _animation.start({reverse: false});
     _reverseAnimation = () => _animation.start({reverse: true});
     _pauseAnimation = () => _animation.pause();
@@ -101,7 +88,6 @@ internal.Player = (element, { renderScene, makeAnimation } = internal.defaults) 
     Loop.on('stop', () => _isLoopStarted = false);
     Loop.on(['pause', 'stop'], _updateLoopState);
 
-
     Loop.register({
       update: _updateLoopState,
       frequency: 10
@@ -112,7 +98,10 @@ internal.Player = (element, { renderScene, makeAnimation } = internal.defaults) 
 
   _observer.observe(element, { childList: true, subtree: true });
 
-  const render = (element, state) => {
+  const render = (element, state = {}) => {
+
+    console.log('render')
+    const { renderScene } = Object.assign({}, internal.defaultState, state);
 
     patch(element, () => {
 
@@ -154,6 +143,27 @@ internal.Player.tagName = 'zwip-player';
 
 internal.Player.shadowRoot = false;
 
-internal.Player.attributes = {};
+internal.Player.properties = {
+  animationState: {},
+  loopState: {},
+  makeAnimation(element, scene) {
 
+    const title = scene.firstChild;
+
+    const start = () => title.style.position = 'absolute';
+
+    const render = () => title.style.left = `${(animation.value * (scene.clientWidth - title.clientWidth - 2) )}px`;
+
+    const animation = Animation({ duration: 10000, start, render });
+
+    return animation;
+  },
+  renderScene() {
+
+    renderElement('h1', null, null, 'style', 'font-size:24px;', () => {
+      text('DEFAULT SCENE');
+    });
+
+  }
+};
 export default internal.Player;
