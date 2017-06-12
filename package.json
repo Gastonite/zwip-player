@@ -2,7 +2,7 @@
   "name": "zwip-player",
   "version": "1.0.1",
   "main": "src/zwip-player.js",
-  "repository": "git+ssh://github/Gastonite/zwip-player.git",
+  "repository": "https://github.com/Gastonite/zwip-player",
   "author": "Clément Pasquier <clement@n00sphere.net>",
   "description": "A Pwet component to play with Zwip animations :)",
   "license": "GPL-3.0",
