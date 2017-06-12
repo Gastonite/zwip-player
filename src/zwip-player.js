@@ -44,7 +44,6 @@ internal.Player = (element) => {
 
   const _updateLoopState = () => {
 
-    console.log('_updateLoopState()');
     const state = element.state;
 
     const loopState = Loop.state;
@@ -101,7 +100,6 @@ internal.Player = (element) => {
 
   const render = (element, state = {}) => {
 
-    console.log('render')
     const { renderScene } = Object.assign({}, internal.defaultState, state);
 
     patch(element, () => {
