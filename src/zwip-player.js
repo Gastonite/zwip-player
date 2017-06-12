@@ -44,6 +44,7 @@ internal.Player = (element) => {
 
   const _updateLoopState = () => {
 
+    console.log('_updateLoopState()');
     const state = element.state;
 
     const loopState = Loop.state;
@@ -116,7 +117,6 @@ internal.Player = (element) => {
           internal.renderControl('◼', _stopAnimation, _isAnimationStarted);
         });
       });
-
       renderDiv(null, null, 'class', 'right', () => {
         renderElement('div', null, null, () => {
           renderH3(text.bind(null, 'Loop state:'));
@@ -130,7 +130,6 @@ internal.Player = (element) => {
           internal.renderControl('◼', Loop.stop, _isLoopStarted);
         })
       });
-
     });
   };
 
