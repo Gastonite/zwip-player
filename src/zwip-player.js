@@ -85,7 +85,7 @@ internal.Player = (element) => {
     _animation.on('start', () => _isAnimationStarted = true);
 
     Loop.on('start', () => _isLoopStarted = true);
-    Loop.on('stop', () => _isLoopStarted = false);
+    Loop.on('stop', () => _isLoopStarted = _isAnimationStarted = false);
     Loop.on(['pause', 'stop', 'tick'], _updateLoopState);
     Loop.on('tick', () => _isLoopStarted = true);
 
@@ -144,11 +144,11 @@ internal.Player.properties = {
 
     const title = scene.firstChild;
 
-    const start = () => title.style.position = 'absolute';
+    title.style.position = 'absolute';
 
     const render = () => title.style.left = `${(animation.value * (scene.clientWidth - title.clientWidth - 2) )}px`;
 
-    const animation = Animation({ duration: 10000, start, render });
+    const animation = Animation({ duration: 800, render });
 
     return animation;
   },
