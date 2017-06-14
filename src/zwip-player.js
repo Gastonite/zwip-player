@@ -148,7 +148,7 @@ internal.Player.properties = {
 
     const render = () => title.style.left = `${(animation.value * (scene.clientWidth - title.clientWidth - 2) )}px`;
 
-    const animation = Animation({ duration: 800, render });
+    const animation = Animation({ duration: 5000, render });
 
     return animation;
   },

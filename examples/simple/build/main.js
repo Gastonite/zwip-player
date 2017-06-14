@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "c39afe029df85aeff134"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "2fab3f0945ba3c6e5ac8"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -9291,7 +9291,7 @@ internal.Player.properties = {
       return title.style.left = animation.value * (scene.clientWidth - title.clientWidth - 2) + 'px';
     };
 
-    var animation = (0, _zwip.Animation)({ duration: 800, render: render });
+    var animation = (0, _zwip.Animation)({ duration: 5000, render: render });
 
     return animation;
   },
