@@ -86,12 +86,8 @@ internal.Player = (element) => {
 
     Loop.on('start', () => _isLoopStarted = true);
     Loop.on('stop', () => _isLoopStarted = false);
-    Loop.on(['pause', 'stop'], _updateLoopState);
-
-    Loop.register({
-      update: _updateLoopState,
-      frequency: 10
-    }, false);
+    Loop.on(['pause', 'stop', 'tick'], _updateLoopState);
+    Loop.on('tick', () => _isLoopStarted = true);
 
     _updateLoopState();
   });
@@ -100,7 +96,7 @@ internal.Player = (element) => {
 
   const render = (element, state = {}) => {
 
-    const { renderScene } = Object.assign({}, internal.defaultState, state);
+    const { renderScene } = state;
 
     patch(element, () => {
 
@@ -115,6 +111,7 @@ internal.Player = (element) => {
           internal.renderControl('◼', _stopAnimation, _isAnimationStarted);
         });
       });
+
       renderDiv(null, null, 'class', 'right', () => {
         renderElement('div', null, null, () => {
           renderH3(text.bind(null, 'Loop state:'));

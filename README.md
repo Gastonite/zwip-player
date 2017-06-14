@@ -12,7 +12,7 @@ show the already builded example:
 ### Build example using webpack-dev-server
 
 ```
-npm install && npm run demo
+npm i && npm run demo
 ```
 
 or, with yarn:
