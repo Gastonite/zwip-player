@@ -6,7 +6,7 @@
   "author": "Clément Pasquier <clement@n00sphere.net>",
   "description": "A Pwet component to play with Zwip animations :)",
   "license": "GPL-3.0",
-  "dependencies": {
+  "devDependencies": {
     "@webcomponents/custom-elements": "^1.0.0",
     "array.from": "^1.0.3",
     "babel-core": "^6.24.1",
@@ -21,12 +21,12 @@
     "incremental-dom": "^0.5.1",
     "klak": "^1.0.2",
     "object.assign": "^4.0.4",
-    "pwet": "^1.1.4",
+    "pwet": "^1.2.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.5",
-    "zwip": "^1.1.2"
+    "zwip": "^1.1.8"
   },
   "scripts": {
     "demo": "webpack-dev-server --config examples/simple/webpack.config.js --progress --colors",

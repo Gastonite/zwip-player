@@ -4,6 +4,7 @@ import { object } from 'pwet/src/attribute';
 import { renderElement, renderStyle, renderStrong, renderH3, renderPre, renderDiv, renderButton } from 'idom-util';
 import { assert } from 'pwet/src/assertions';
 import { noop } from 'pwet/src/utilities';
+import { isAnimation } from 'zwip/src/utils';
 import { patch, text } from 'incremental-dom';
 
 import style from '!css-loader!stylus-loader!./zwip-player.styl';
@@ -30,7 +31,9 @@ internal.renderObject = (object = {}) => {
   });
 };
 
-internal.Player = (element) => {
+internal.Player = (component) => {
+
+  const { element } = component;
 
   let _loaded = false;
   let _animation = false;
@@ -74,7 +77,7 @@ internal.Player = (element) => {
 
     _animation = element.makeAnimation(element.querySelector('.scene'));
 
-    assert(Animation.isAnimation(_animation), `'makeAnimation' did not return a Zwip animation`);
+    assert(isAnimation(_animation), `'makeAnimation' did not return a Zwip animation`);
 
     _playAnimation = () => _animation.start({reverse: false});
     _reverseAnimation = () => _animation.start({reverse: true});
@@ -94,7 +97,7 @@ internal.Player = (element) => {
 
   _observer.observe(element, { childList: true, subtree: true });
 
-  const render = (element, state = {}) => {
+  const render = (state = {}) => {
 
     const { renderScene } = state;
 
@@ -128,9 +131,7 @@ internal.Player = (element) => {
     });
   };
 
-  const component = Component(internal.Player, element, { render });
-
-  return component;
+  return { render };
 };
 
 internal.Player.tagName = 'zwip-player';
@@ -160,4 +161,5 @@ internal.Player.properties = {
 
   }
 };
+
 export default internal.Player;

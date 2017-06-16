@@ -3024,9 +3024,9 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-pwet@^1.1.4:
-  version "1.1.4"
-  resolved "https://registry.yarnpkg.com/pwet/-/pwet-1.1.4.tgz#2d85aa205c3bf131eed57056da6f7c4d0e3be47c"
+pwet@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/pwet/-/pwet-1.2.0.tgz#03fbff75e071865b151d44c4b87a2b7d6da0bf7f"
   dependencies:
     "@webcomponents/custom-elements" "https://github.com/webcomponents/custom-elements/archive/f4b6f1f.tar.gz"
     "@webcomponents/shadycss" "https://github.com/webcomponents/shadycss/archive/bea402d.tar.gz"
@@ -4001,6 +4001,6 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-zwip@^1.1.2:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/zwip/-/zwip-1.1.2.tgz#06177a37788f7424dcd1a62d69f8c2e22815fb44"
+zwip@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.yarnpkg.com/zwip/-/zwip-1.1.8.tgz#ff11835f6eb88b5707a6d7eaff14f77f4c9e2aca"
