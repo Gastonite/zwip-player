@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "850a0d97cf08561c2d45"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "9b4ed5434043d0db4710"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -11123,10 +11123,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 var _zwip = __webpack_require__("../../node_modules/zwip/src/index.js");
-
-var _component = __webpack_require__("../../node_modules/pwet/src/component.js");
-
-var _component2 = _interopRequireDefault(_component);
 
 var _attribute = __webpack_require__("../../node_modules/pwet/src/attribute.js");
 

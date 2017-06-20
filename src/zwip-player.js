@@ -1,5 +1,4 @@
 import { Animation, Loop } from 'zwip';
-import Component from 'pwet/src/component';
 import { object } from 'pwet/src/attribute';
 import { renderElement, renderStyle, renderStrong, renderH3, renderPre, renderDiv, renderButton } from 'idom-util';
 import { assert } from 'pwet/src/assertions';
