@@ -35,6 +35,8 @@ internal.Player = (component) => {
 
   const { element } = component;
 
+  console.log('ZwipPlayer()');
+
   let _loaded = false;
   let _animation = false;
   let _playAnimation = noop;
@@ -47,7 +49,7 @@ internal.Player = (component) => {
 
   const _updateLoopState = () => {
 
-    const state = element.state;
+    const { state } = component;
 
     const loopState = Loop.state;
 
@@ -62,7 +64,7 @@ internal.Player = (component) => {
       duration: `${played}/${duration}`,
     };
 
-    element.state = Object.assign(state, {
+    component.state = Object.assign(state, {
       loopState,
       animationState
     });
@@ -97,9 +99,13 @@ internal.Player = (component) => {
 
   _observer.observe(element, { childList: true, subtree: true });
 
-  const render = (state = {}) => {
+  const render = () => {
 
-    const { renderScene } = state;
+    const { state, properties } = component;
+    const { renderScene } = properties;
+    const { loopState, animationState } = state;
+
+    console.log('ZwipPlayer.render()');
 
     patch(element, () => {
 
@@ -118,9 +124,9 @@ internal.Player = (component) => {
       renderDiv(null, null, 'class', 'right', () => {
         renderElement('div', null, null, () => {
           renderH3(text.bind(null, 'Loop state:'));
-          internal.renderObject(element.loopState);
+          internal.renderObject(loopState);
           renderH3(text.bind(null, 'Animation state:'));
-          internal.renderObject(element.animationState);
+          internal.renderObject(animationState);
         });
         renderDiv(null, null, 'class', 'toolbar', () => {
           internal.renderControl('▶', Loop.start, !_isLoopStarted);
@@ -138,10 +144,13 @@ internal.Player.tagName = 'zwip-player';
 
 internal.Player.shadowRoot = false;
 
-internal.Player.properties = {
+internal.Player.initialState = {
   animationState: {},
   loopState: {},
-  makeAnimation(element, scene) {
+};
+
+internal.Player.properties = {
+  makeAnimation(scene) {
 
     const title = scene.firstChild;
 
@@ -149,7 +158,7 @@ internal.Player.properties = {
 
     const render = () => title.style.left = `${(animation.value * (scene.clientWidth - title.clientWidth - 2) )}px`;
 
-    const animation = Animation({ duration: 5000, render });
+    const animation = Animation({ duration: 5000, render, easing: 'easeOutCirc' });
 
     return animation;
   },
