@@ -5,7 +5,7 @@ import { renderElement, renderStyle, renderStrong, renderH3, renderPre, renderDi
 import { assert } from 'pwet/src/assertions';
 import { noop } from 'pwet/src/utilities';
 import { isAnimation } from 'zwip/src/utils';
-import { patch, text } from 'incremental-dom';
+import { patch, text, skipNode } from 'incremental-dom';
 
 import style from '!css-loader!stylus-loader!./zwip-player.styl';
 
@@ -101,7 +101,7 @@ internal.Player = (component) => {
 
   const render = () => {
 
-    const { state, properties } = component;
+    const { state, properties, isRendered } = component;
     const { renderScene } = properties;
     const { loopState, animationState } = state;
 
@@ -112,7 +112,13 @@ internal.Player = (component) => {
       renderStyle(style.toString());
 
       renderDiv(null, null, 'class', 'left', () => {
-        renderDiv(null, null, 'class', 'scene', renderScene);
+        renderDiv(null, null, 'class', 'scene', () => {
+
+          if (isRendered)
+            return skipNode();
+
+          renderScene()
+        });
         renderDiv(null, null, 'class', 'toolbar', () => {
           internal.renderControl('◀', _reverseAnimation, !_isAnimationStarted);
           internal.renderControl('▶', _playAnimation, !_isAnimationStarted);
