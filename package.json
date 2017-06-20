@@ -6,7 +6,7 @@
   "author": "Clément Pasquier <clement@n00sphere.net>",
   "description": "A Pwet component to play with Zwip animations :)",
   "license": "GPL-3.0",
-  "devDependencies": {
+  "dependencies": {
     "@webcomponents/custom-elements": "^1.0.0",
     "array.from": "^1.0.3",
     "babel-core": "^6.24.1",
