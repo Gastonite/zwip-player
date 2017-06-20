@@ -54,13 +54,6 @@ ajv@^4.7.0, ajv@^4.9.1:
     co "^4.6.0"
     json-stable-stringify "^1.0.1"
 
-ajv@^5.0.0:
-  version "5.1.5"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-5.1.5.tgz#8734931b601f00d4feef7c65738d77d1b65d1f68"
-  dependencies:
-    co "^4.6.0"
-    json-stable-stringify "^1.0.1"
-
 align-text@^0.1.1, align-text@^0.1.3:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/align-text/-/align-text-0.1.4.tgz#0cd90a561093f35d0a99256c22b7069433fad117"
@@ -1155,7 +1148,7 @@ css-color-names@0.0.4:
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/css-color-names/-/css-color-names-0.0.4.tgz#808adc2e79cf84738069b646cb20ec27beb629e0"
 
-css-loader@^0.28.1, css-loader@^0.28.4:
+css-loader@^0.28.4:
   version "0.28.4"
   resolved "https://registry.yarnpkg.com/css-loader/-/css-loader-0.28.4.tgz#6cf3579192ce355e8b38d5f42dd7a1f2ec898d0f"
   dependencies:
@@ -1553,15 +1546,6 @@ extglob@^0.3.1:
   resolved "https://registry.yarnpkg.com/extglob/-/extglob-0.3.2.tgz#2e18ff3d2f49ab2765cec9023f011daa8d8349a1"
   dependencies:
     is-extglob "^1.0.0"
-
-extract-text-webpack-plugin@^2.1.0:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/extract-text-webpack-plugin/-/extract-text-webpack-plugin-2.1.2.tgz#756ef4efa8155c3681833fbc34da53b941746d6c"
-  dependencies:
-    async "^2.1.2"
-    loader-utils "^1.0.2"
-    schema-utils "^0.3.0"
-    webpack-sources "^1.0.1"
 
 extsprintf@1.0.2:
   version "1.0.2"
@@ -2221,7 +2205,7 @@ kind-of@^4.0.0:
   dependencies:
     is-buffer "^1.1.5"
 
-klak@^1.0.2:
+klak@^1.0.0, klak@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/klak/-/klak-1.0.2.tgz#1d4fa7b885d96b264adbe9b5d6d39b59586939d4"
 
@@ -2277,6 +2261,10 @@ lodash.clonedeep@^4.5.0:
 lodash.isequal@^4.5.0:
   version "4.5.0"
   resolved "https://registry.yarnpkg.com/lodash.isequal/-/lodash.isequal-4.5.0.tgz#415c4478f2bcc30120c22ce10ed3226f7d3e18e0"
+
+lodash.kebabcase@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.kebabcase/-/lodash.kebabcase-4.1.1.tgz#8489b1cb0d29ff88195cceca448ff6d6cc295c36"
 
 lodash.memoize@^4.1.2:
   version "4.1.2"
@@ -3028,31 +3016,18 @@ punycode@^1.2.4, punycode@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.4.1.tgz#c0d5a63b2718800ad8e1eb0fa5269c84dd41845e"
 
-pwet@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.yarnpkg.com/pwet/-/pwet-1.3.2.tgz#d7e16deee9477dc5c17b45808d9853d4470fa1ea"
+pwet@^1.3.4:
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/pwet/-/pwet-1.3.4.tgz#3d5ce784985f74aefc1e4c590f84605678d75b88"
   dependencies:
     "@webcomponents/custom-elements" "https://github.com/webcomponents/custom-elements/archive/f4b6f1f.tar.gz"
     "@webcomponents/shadycss" "https://github.com/webcomponents/shadycss/archive/bea402d.tar.gz"
     "@webcomponents/template" "https://github.com/webcomponents/template/archive/60d743e.tar.gz"
     array.from "^1.0.3"
-    babel-core "^6.24.1"
-    babel-loader "^7.0.0"
-    babel-plugin-transform-export-extensions "^6.22.0"
-    babel-preset-es2015 "^6.24.1"
-    babel-preset-stage-3 "^6.24.1"
     cloudydom "^1.0.2"
-    css-loader "^0.28.1"
     es6-promise "^4.0.5"
-    extract-text-webpack-plugin "^2.1.0"
-    html-webpack-plugin "^2.28.0"
     lodash.isequal "^4.5.0"
     object.assign "^4.0.4"
-    style-loader "^0.17.0"
-    stylus "^0.54.5"
-    stylus-loader "^3.0.1"
-    webpack "^2.5.1"
-    webpack-dev-server "^2.4.5"
 
 q@^1.1.2:
   version "1.5.0"
@@ -3325,12 +3300,6 @@ sax@~1.2.1:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.2.tgz#fd8631a23bc7826bef5d871bdb87378c95647828"
 
-schema-utils@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-0.3.0.tgz#f5877222ce3e931edae039f17eb3716e7137f8cf"
-  dependencies:
-    ajv "^5.0.0"
-
 select-hose@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/select-hose/-/select-hose-2.0.0.tgz#625d8658f865af43ec962bfc376a37359a4994ca"
@@ -3445,10 +3414,6 @@ source-list-map@^0.1.7:
 source-list-map@^1.1.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-1.1.2.tgz#9889019d1024cce55cdc069498337ef6186a11a1"
-
-source-list-map@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/source-list-map/-/source-list-map-2.0.0.tgz#aaa47403f7b245a92fbc97ea08f250d6087ed085"
 
 source-map-support@^0.4.2:
   version "0.4.15"
@@ -3583,12 +3548,6 @@ strip-bom@^2.0.0:
 strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
-
-style-loader@^0.17.0:
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/style-loader/-/style-loader-0.17.0.tgz#e8254bccdb7af74bd58274e36107b4d5ab4df310"
-  dependencies:
-    loader-utils "^1.0.2"
 
 stylus-loader@^3.0.1:
   version "3.0.1"
@@ -3881,14 +3840,7 @@ webpack-sources@^0.2.3:
     source-list-map "^1.1.1"
     source-map "~0.5.3"
 
-webpack-sources@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/webpack-sources/-/webpack-sources-1.0.1.tgz#c7356436a4d13123be2e2426a05d1dad9cbe65cf"
-  dependencies:
-    source-list-map "^2.0.0"
-    source-map "~0.5.3"
-
-webpack@^2.5.1, webpack@^2.6.1:
+webpack@^2.6.1:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/webpack/-/webpack-2.6.1.tgz#2e0457f0abb1ac5df3ab106c69c672f236785f07"
   dependencies:
@@ -4006,6 +3958,9 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
-zwip@^1.1.8:
-  version "1.1.8"
-  resolved "https://registry.yarnpkg.com/zwip/-/zwip-1.1.8.tgz#ff11835f6eb88b5707a6d7eaff14f77f4c9e2aca"
+zwip@^1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/zwip/-/zwip-1.2.2.tgz#f73f9a447a3d9ae21e19c5235501080c9cd334f7"
+  dependencies:
+    klak "^1.0.0"
+    lodash.kebabcase "^4.1.1"
