@@ -3,6 +3,7 @@ import { object } from 'pwet/src/attribute';
 import { renderElement, renderStyle, renderStrong, renderH3, renderPre, renderDiv, renderButton } from 'idom-util';
 import { assert } from 'pwet/src/assertions';
 import { noop } from 'pwet/src/utilities';
+import StatefulComponent from 'pwet/src/decorators/stateful';
 import { isAnimation } from 'zwip/src/utils';
 import { patch, text, skipNode } from 'incremental-dom';
 
@@ -34,7 +35,7 @@ internal.Player = (component) => {
 
   const { element } = component;
 
-  console.log('ZwipPlayer()');
+  console.log('ZwipPlayer()', component, element);
 
   let _loaded = false;
   let _animation = false;
@@ -144,6 +145,8 @@ internal.Player = (component) => {
 
   return { render };
 };
+
+internal.Player.create = StatefulComponent;
 
 internal.Player.tagName = 'zwip-player';
 

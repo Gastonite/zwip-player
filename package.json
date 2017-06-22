@@ -19,15 +19,15 @@
   "dependencies": {
     "@webcomponents/custom-elements": "^1.0.0",
     "array.from": "^1.0.3",
+    "css-loader": "^0.28.4",
     "es6-promise": "^4.1.0",
     "idom-util": "^1.0.0",
     "klak": "^1.0.2",
     "object.assign": "^4.0.4",
-    "pwet": "^1.3.5",
-    "zwip": "^1.2.2",
-    "css-loader": "^0.28.4",
+    "pwet": "^1.3.7",
     "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.1"
+    "stylus-loader": "^3.0.1",
+    "zwip": "^1.2.2"
   },
   "scripts": {
     "demo": "webpack-dev-server --config examples/simple/webpack.config.js --progress --colors",

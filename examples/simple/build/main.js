@@ -59,7 +59,7 @@
 /******/ 	
 /******/ 	
 /******/ 	var hotApplyOnUpdate = true;
-/******/ 	var hotCurrentHash = "9b4ed5434043d0db4710"; // eslint-disable-line no-unused-vars
+/******/ 	var hotCurrentHash = "81b6042f2835e944d30a"; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentModuleData = {};
 /******/ 	var hotCurrentChildModule; // eslint-disable-line no-unused-vars
 /******/ 	var hotCurrentParents = []; // eslint-disable-line no-unused-vars
@@ -9613,7 +9613,7 @@ var isString = exports.isString = function isString(input) {
   return ofType('string', input);
 };
 var isFunction = exports.isFunction = function isFunction(input) {
-  return ofType('function', input);
+  return ofType('function', input) && input;
 };
 var isNumber = exports.isNumber = function isNumber(input) {
   return ofType('number', input);
@@ -9650,22 +9650,21 @@ internal.empty = function (val) {
 };
 internal.nullOrType = function (type) {
   return function (val) {
-    return internal.empty(val) ? null : type(val);
+    return !val ? null : type(val);
   };
 };
 internal.zeroOrNumber = function (val) {
-  return internal.empty(val) ? 0 : Number(val);
+  return !val ? 0 : Number(val);
 };
-internal.attribute = Object.freeze({ source: true });
 
 internal.Attribute = module.exports = function (attribute) {
 
   (0, _assertions.assert)((0, _assertions.isObject)(attribute), '\'attribute\' must be an object');
 
   var _attribute$stringify = attribute.stringify,
-      stringify = _attribute$stringify === undefined ? _utilities.identity : _attribute$stringify,
+      stringify = _attribute$stringify === undefined ? JSON.stringify : _attribute$stringify,
       _attribute$parse = attribute.parse,
-      parse = _attribute$parse === undefined ? _utilities.identity : _attribute$parse,
+      parse = _attribute$parse === undefined ? JSON.parse : _attribute$parse,
       _attribute$coerce = attribute.coerce,
       coerce = _attribute$coerce === undefined ? _utilities.identity : _attribute$coerce,
       defaultValue = attribute.defaultValue;
@@ -9673,10 +9672,9 @@ internal.Attribute = module.exports = function (attribute) {
 
   (0, _assertions.assert)((0, _assertions.isFunction)(stringify), '\'stringify\' must be a function');
   (0, _assertions.assert)((0, _assertions.isFunction)(parse), '\'parse\' must be a function');
-  (0, _assertions.assert)((0, _assertions.isFunction)(coerce), '\'coerce\' must be a function');
 
-  return Object.freeze({
-    isPwetAttribute: true,
+  return Object.assign(attribute, {
+    isAttribute: true,
     stringify: stringify,
     parse: parse,
     coerce: coerce,
@@ -9684,48 +9682,71 @@ internal.Attribute = module.exports = function (attribute) {
   });
 };
 
-internal.Attribute.isAttribute = function (input) {
-  return (0, _assertions.isObject)(input) && input.isPwetAttribute === true;
+internal.Attribute.array = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return internal.Attribute(Object.assign({
+    coerce: function coerce(val) {
+      return Array.isArray(val) ? val : !val ? null : [val];
+    },
+    defaultValue: []
+  }, options));
 };
 
-internal.Attribute.array = internal.Attribute({
-  coerce: function coerce(val) {
-    return Array.isArray(val) ? val : internal.empty(val) ? null : [val];
-  },
-  defaultValue: Object.freeze([]),
-  parse: JSON.parse,
-  stringify: JSON.stringify
-});
+internal.Attribute.boolean = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return internal.Attribute(Object.assign({
+    coerce: Boolean,
+    defaultValue: false,
+    parse: function parse(val) {
+      return !!val;
+    },
+    stringify: function stringify(val) {
+      return val ? '' : null;
+    }
+  }, options));
+};
 
-internal.Attribute.boolean = internal.Attribute({
-  coerce: Boolean,
-  defaultValue: false,
-  parse: function parse(val) {
-    return !internal.empty(val);
-  },
-  stringify: function stringify(val) {
-    return val ? '' : null;
-  }
-});
+internal.Attribute.number = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return internal.Attribute(Object.assign({
+    defaultValue: 0,
+    coerce: internal.zeroOrNumber,
+    parse: internal.zeroOrNumber,
+    stringify: internal.nullOrType(Number)
+  }, options));
+};
 
-internal.Attribute.number = internal.Attribute({
-  defaultValue: 0,
-  coerce: internal.zeroOrNumber,
-  parse: internal.zeroOrNumber,
-  stringify: internal.nullOrType(Number)
-});
+internal.Attribute.integer = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return internal.Attribute.number(Object.assign(options, {
+    coerce: parseInt,
+    parse: parseInt
+  }));
+};
 
-internal.Attribute.object = internal.Attribute({
-  defaultValue: Object.freeze({}),
-  parse: JSON.parse,
-  stringify: JSON.stringify
-});
+internal.Attribute.float = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return internal.Attribute.number(Object.assign(options, {
+    coerce: parseFloat,
+    parse: parseFloat
+  }));
+};
 
-internal.Attribute.string = internal.Attribute({
-  defaultValue: '',
-  coerce: String,
-  stringify: internal.nullOrType(String)
-});
+internal.Attribute.object = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return internal.Attribute(Object.assign({
+    defaultValue: {}
+  }, options));
+};
+
+internal.Attribute.string = function () {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  return internal.Attribute(Object.assign({
+    defaultValue: '',
+    coerce: String,
+    stringify: internal.nullOrType(String)
+  }, options));
+};
 
 /***/ }),
 
@@ -9738,6 +9759,7 @@ internal.Attribute.string = internal.Attribute({
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.default = exports.StatefulComponent = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -9751,9 +9773,9 @@ var _property = __webpack_require__("../../node_modules/pwet/src/property.js");
 
 var _property2 = _interopRequireDefault(_property);
 
-var _attribute = __webpack_require__("../../node_modules/pwet/src/attribute.js");
+var _stateful = __webpack_require__("../../node_modules/pwet/src/decorators/stateful.js");
 
-var _attribute2 = _interopRequireDefault(_attribute);
+var _stateful2 = _interopRequireDefault(_stateful);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -9767,7 +9789,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var internal = {
   factories: [],
-  allowedHooks: ['attach', 'detach', 'initialize', 'update', 'render']
+  allowedHooks: ['attach', 'detach', 'initialize', 'render']
 };
 
 internal.parseProperties = function (input) {
@@ -9786,10 +9808,6 @@ internal.parseProperties = function (input) {
 
     if (!(0, _assertions.isObject)(property)) property = { defaultValue: property };
 
-    if (_attribute2.default.isAttribute(property)) property = {
-      attribute: property
-    };
-
     property.name = key;
 
     property = (0, _property2.default)(property);
@@ -9799,63 +9817,35 @@ internal.parseProperties = function (input) {
     return properties;
   }, properties);
 };
-internal.isAllowedHook = function (key) {
-  return internal.allowedHooks.includes(key);
+
+internal.StatelessError = function () {
+  throw new Error('Component is Stateless');
+};
+
+internal.isAllowedHook = function (factory, key) {
+  return factory.allowedHooks.includes(key);
 };
 
 internal.defaultsHooks = {
   attach: function attach(component, _attach) {
     _attach(!component.isRendered);
   },
-  update: function update(component, newState, _update) {
-    _update(true);
-  },
   initialize: function initialize(component, newProperties, _initialize) {
     _initialize(true);
   }
 };
 
-internal.Component = function (factory, element) {
+var Component = function Component(factory, element) {
 
-  (0, _assertions.assert)(internal.Component.get(factory), '\'factory\' must be a defined component factory');
+  (0, _assertions.assert)(Component.get(factory), '\'factory\' must be a defined component factory');
   (0, _assertions.assert)((0, _assertions.isElement)(element), '\'element\' must be a HTMLElement');
 
   if (element.pwet !== void 0) return;
 
   var _isAttached = false;
   var _isRendered = false;
-  var _isUpdating = false;
   var _isInitializing = false;
-  var _state = factory.initialState();
   var _properties = {};
-  var _callbacks = [];
-
-  var attributeChanged = function attributeChanged(name, oldValue, newValue) {
-    var properties = component.properties;
-
-
-    _attributes.forEach(function (property) {
-
-      if (name === property.name) properties[name] = property.attribute.parse(newValue);
-    });
-
-    component.properties = properties;
-  };
-
-  var editState = function editState(partialState /*, callback*/) {
-    // console.log('Component.editState()');
-
-    (0, _assertions.assert)((0, _assertions.isObject)(partialState) && !(0, _assertions.isNull)(partialState), '\'partialState\' must be an object');
-
-    // if (!isUndefined(callback))
-    //   _callbacks.push(callback);
-
-    var state = component.state;
-
-    Object.assign(state, partialState);
-
-    update(state);
-  };
 
   var attach = function attach() {
     // console.log('Component.attach()');
@@ -9864,7 +9854,7 @@ internal.Component = function (factory, element) {
 
     if (factory.shadowRoot) element.shadowRoot = element.attachShadow(factory.shadowRoot);
 
-    _hooks.attach(function () {
+    component.hooks.attach(function () {
       var shouldRender = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
 
@@ -9881,7 +9871,7 @@ internal.Component = function (factory, element) {
 
     _isAttached = false;
 
-    _hooks.detach();
+    component.hooks.detach();
   };
 
   var initialize = function initialize(newProperties) {
@@ -9902,7 +9892,7 @@ internal.Component = function (factory, element) {
       return Object.assign(properties, _defineProperty({}, name, !(0, _assertions.isUndefined)(newProperties[name]) ? coerce(newProperties[name]) : !(0, _assertions.isUndefined)(_properties[name]) ? _properties[name] : defaultValue));
     }, {});
 
-    _hooks.initialize(newProperties, function () {
+    component.hooks.initialize(newProperties, function () {
       var shouldRender = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
 
 
@@ -9914,43 +9904,12 @@ internal.Component = function (factory, element) {
     });
   };
 
-  var update = function update(newState) {
-    // console.log('Component.update()', newState);
-
-    if (_isUpdating) return;
-
-    (0, _assertions.assert)((0, _assertions.isObject)(newState) && !(0, _assertions.isNull)(newState), '\'newState\' must be an object');
-
-    (0, _assertions.assert)(_state !== newState, '\'newState\' must not be equal to previous state');
-
-    if (_isInitializing) return void (_state = newState);
-
-    _isUpdating = true;
-
-    _hooks.update(newState, function () {
-      var shouldRender = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-
-      _state = newState;
-
-      // const shift = _callbacks.shift.bind(_callbacks);
-      // const stateCopy = Object.assign({}, newState);
-      //
-      // while (_callbacks.length > 0)
-      //   shift()(stateCopy);
-
-      if (shouldRender) component.render();
-
-      _isUpdating = false;
-    });
-  };
-
   var render = function render() {
     // console.log('Component.render()', _isAttached);
 
     if (!_isAttached) return;
 
-    _hooks.render();
+    component.hooks.render();
 
     _isRendered = true;
   };
@@ -9958,38 +9917,37 @@ internal.Component = function (factory, element) {
   var component = element.pwet = {
     isPwetComponent: true,
     element: element,
-    editState: editState,
     attach: attach,
     detach: detach,
     initialize: initialize,
-    update: update,
     render: render,
-    attributeChanged: attributeChanged,
     get isRendered() {
       return _isRendered;
+    },
+    get isInitializing() {
+      return _isInitializing;
+    },
+    get hooks() {
+      return _hooks;
+    },
+    get state() {
+      return _hooks;
+    },
+    set properties(newValue) {
+      return _hooks;
     }
   };
 
-  var _hooks = {
-    initialize: factory.initialize.bind(null, component),
-    update: factory.update.bind(null, component),
-    render: factory.render.bind(null, component),
-    attach: factory.attach.bind(null, component),
-    detach: factory.detach.bind(null, component)
-  };
+  var _hooks = factory.allowedHooks.reduce(function (hooks, key) {
+    return Object.assign(hooks, _defineProperty({}, key, factory[key].bind(null, component)));
+  }, {});
 
-  var _attributes = factory.properties.filter(function (property) {
-    return property.attribute !== false;
-  });
+  (0, _assertions.assert)(_hooks.render !== _utilities.noop, '\'render\' method is required');
 
   Object.defineProperty(component, 'state', {
-    get: function get() {
-      return Object.assign({}, _state);
-    },
-    set: function set(newState) {
-
-      if (!_isUpdating) component.update(newState);
-    }
+    configurable: true,
+    get: internal.StatelessError,
+    set: internal.StatelessError
   });
 
   Object.defineProperty(component, 'properties', {
@@ -10000,20 +9958,22 @@ internal.Component = function (factory, element) {
     set: initialize
   });
 
-  var overridenHooks = factory(Object.freeze(component));
+  factory.create(component, factory);
 
-  if (!(0, _assertions.isObject)(overridenHooks) || (0, _assertions.isNull)(overridenHooks)) return component;
+  var hooks = factory(component);
 
-  Object.keys(overridenHooks).filter(internal.isAllowedHook).forEach(function (key) {
+  // factory.create(factory(component), factory);
 
-    var method = overridenHooks[key];
+  if (!(0, _assertions.isObject)(hooks) || (0, _assertions.isNull)(hooks)) return component;
 
-    (0, _assertions.assert)((0, _assertions.isFunction)(method), '\'' + key + '\' must be a function');
+  Object.keys(hooks).filter(internal.isAllowedHook.bind(null, factory)).forEach(function (key) {
 
-    _hooks[key] = method;
+    var hook = hooks[key];
+
+    (0, _assertions.assert)((0, _assertions.isFunction)(hook), '\'' + key + '\' hook must be a function');
+
+    _hooks[key] = hook;
   });
-
-  (0, _assertions.assert)(_hooks.render !== _utilities.noop, '\'render\' method is required');
 
   // first initialization
   component.properties = factory.properties.reduce(function (properties, _ref2) {
@@ -10047,11 +10007,11 @@ internal.Component = function (factory, element) {
   return component;
 };
 
-internal.Component.get = function (input) {
+Component.get = function (input) {
   return internal.factories.find((0, _filters.EqualFilter)(input));
 };
 
-internal.Component.define = function (factory, options) {
+Component.define = function (factory, options) {
 
   (0, _assertions.assert)((0, _assertions.isFunction)(factory), '\'factory\' must be a function');
 
@@ -10060,34 +10020,33 @@ internal.Component.define = function (factory, options) {
   var tagName = factory.tagName,
       _factory$attributes = factory.attributes,
       attributes = _factory$attributes === undefined ? {} : _factory$attributes;
-  var _factory$initialState = factory.initialState,
-      initialState = _factory$initialState === undefined ? {} : _factory$initialState;
 
 
   (0, _assertions.assert)((0, _assertions.isString)(tagName) && /[a-z0-9-]+/i, '\'tagName\' must be a string');
-  (0, _assertions.assert)(!internal.Component.get(factory), 'That component factory is already defined');
+  (0, _assertions.assert)(!Component.get(factory), 'That component factory is already defined');
   (0, _assertions.assert)(!internal.factories.find((0, _filters.ByFilter)('tagName', tagName)), '\'' + tagName + '\' component is already defined');
 
-  if ((0, _assertions.isObject)(initialState) && !(0, _assertions.isNull)(initialState)) initialState = _utilities.identity.bind(null, initialState);
-
-  (0, _assertions.assert)((0, _assertions.isFunction)(initialState), '\'initialState\' must be an object or a function');
-
-  factory.initialState = initialState;
   factory.properties = internal.parseProperties(factory.properties);
+
+  var _attributes = factory.properties.filter(function (property) {
+    return property.isAttribute === true;
+  });
+
+  var _attributesNames = _attributes.map(function (property) {
+    return property.name;
+  });
 
   if (!(0, _assertions.isFunction)(factory.attach)) factory.attach = internal.defaultsHooks.attach;
   if (!(0, _assertions.isFunction)(factory.initialize)) factory.initialize = internal.defaultsHooks.initialize;
   if (!(0, _assertions.isFunction)(factory.detach)) factory.detach = _utilities.noop;
-  if (!(0, _assertions.isFunction)(factory.update)) factory.update = internal.defaultsHooks.update;
   if (!(0, _assertions.isFunction)(factory.render)) factory.render = _utilities.noop;
+  if (!(0, _assertions.isFunction)(factory.create)) factory.create = _utilities.identity;
+
+  factory.allowedHooks = internal.allowedHooks; //.concat(allowedHooks);
+
+  if ((0, _assertions.isFunction)(factory.create.define)) factory.create.define(factory);
 
   internal.factories.push(factory);
-
-  var attributesNames = factory.properties.filter(function (property) {
-    return property.attribute;
-  }).map(function (property) {
-    return property.name;
-  });
 
   customElements.define(tagName, function (_HTMLElement) {
     _inherits(_class, _HTMLElement);
@@ -10097,7 +10056,7 @@ internal.Component.define = function (factory, options) {
 
       var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this));
 
-      internal.Component(factory, _this);
+      Component(factory, _this);
       return _this;
     }
 
@@ -10116,14 +10075,21 @@ internal.Component.define = function (factory, options) {
     }, {
       key: 'attributeChangedCallback',
       value: function attributeChangedCallback(name, oldValue, newValue) {
+        var properties = this.pwet.properties;
 
-        this.pwet.attributeChanged(name, oldValue, newValue);
+
+        _attributes.forEach(function (property) {
+
+          if (name === property.name) properties[name] = property.parse(newValue);
+        });
+
+        this.pwet.properties = properties;
       }
     }], [{
       key: 'observedAttributes',
       get: function get() {
 
-        return attributesNames;
+        return _attributesNames;
       }
     }]);
 
@@ -10131,7 +10097,112 @@ internal.Component.define = function (factory, options) {
   }(HTMLElement));
 };
 
-exports.default = internal.Component;
+exports.StatefulComponent = _stateful2.default;
+exports.default = Component;
+
+/***/ }),
+
+/***/ "../../node_modules/pwet/src/decorators/stateful.js":
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _utilities = __webpack_require__("../../node_modules/pwet/src/utilities.js");
+
+var _assertions = __webpack_require__("../../node_modules/pwet/src/assertions.js");
+
+var internal = {
+  allowedHooks: ['update']
+};
+
+internal.defaultsHooks = {
+  update: function update(component, newState, _update) {
+    _update(true);
+  }
+};
+
+var StatefulComponent = function StatefulComponent(component, factory) {
+
+  var _state = factory.initialState();
+  var _isUpdating = false;
+
+  var editState = function editState(partialState) {
+
+    (0, _assertions.assert)((0, _assertions.isObject)(partialState) && !(0, _assertions.isNull)(partialState), '\'partialState\' must be an object');
+
+    var state = component.state;
+
+    Object.assign(state, partialState);
+
+    update(state);
+  };
+
+  var update = function update(newState) {
+
+    if (_isUpdating) return;
+
+    (0, _assertions.assert)((0, _assertions.isObject)(newState) && !(0, _assertions.isNull)(newState), '\'newState\' must be an object');
+
+    (0, _assertions.assert)(_state !== newState, '\'newState\' must not be equal to previous state');
+
+    if (component.isInitializing) return void (_state = newState);
+
+    _isUpdating = true;
+
+    component.hooks.update(newState, function () {
+      var shouldRender = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+
+      _state = newState;
+
+      if (shouldRender) component.render();
+
+      _isUpdating = false;
+    });
+  };
+
+  Object.assign(component, {
+    editState: editState,
+    update: update,
+    get isUpdating() {
+      return _isUpdating;
+    }
+  });
+
+  Object.defineProperty(component, 'state', {
+    configurable: true,
+    get: function get() {
+      return Object.assign({}, _state);
+    },
+    set: function set(newState) {
+
+      if (!_isUpdating) component.update(newState);
+    }
+  });
+
+  return component;
+};
+
+StatefulComponent.define = function (factory) {
+  var initialState = factory.initialState,
+      allowedHooks = factory.allowedHooks;
+
+
+  (0, _assertions.assert)((0, _assertions.isArray)(allowedHooks) && allowedHooks.every(_assertions.isString), '\'allowedHooks\' must be an array of string');
+
+  factory.allowedHooks = allowedHooks.concat(internal.allowedHooks);
+
+  factory.initialState = (0, _assertions.isObject)(initialState) && !(0, _assertions.isNull)(initialState) ? _utilities.identity.bind(null, initialState) : (0, _assertions.assert)((0, _assertions.isFunction)(initialState), '\'initialState\' must be an object or a function');
+
+  if (!(0, _assertions.isFunction)(factory.update)) factory.update = internal.defaultsHooks.update;
+};
+
+exports.default = StatefulComponent;
 
 /***/ }),
 
@@ -10226,12 +10297,6 @@ var _utilities = __webpack_require__("../../node_modules/pwet/src/utilities.js")
 
 var _assertions = __webpack_require__("../../node_modules/pwet/src/assertions.js");
 
-var _attribute = __webpack_require__("../../node_modules/pwet/src/attribute.js");
-
-var _attribute2 = _interopRequireDefault(_attribute);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 var internal = {};
 
 internal.Property = module.exports = function (property) {
@@ -10239,34 +10304,31 @@ internal.Property = module.exports = function (property) {
   (0, _assertions.assert)((0, _assertions.isObject)(property), '\'property\' must be an object');
 
   var name = property.name,
-      _property$attribute = property.attribute,
-      attribute = _property$attribute === undefined ? false : _property$attribute,
-      _property$isPartOfSta = property.isPartOfState,
-      isPartOfState = _property$isPartOfSta === undefined ? false : _property$isPartOfSta,
       _property$coerce = property.coerce,
       coerce = _property$coerce === undefined ? _utilities.identity : _property$coerce,
       defaultValue = property.defaultValue;
 
+  // console.log(property)
 
   (0, _assertions.assert)((0, _assertions.isString)(name), '\'name\' must be a string');
   (0, _assertions.assert)((0, _assertions.isFunction)(coerce), '\'coerce\' must be a function');
-  (0, _assertions.assert)((0, _assertions.isBoolean)(isPartOfState), '\'isPartOfState\' must be a boolean');
 
-  if (attribute) {
-
-    (0, _assertions.assert)(_attribute2.default.isAttribute(attribute), '\'attribute\' is not an Attribute object');
-
-    if ((0, _assertions.isUndefined)(defaultValue) && !(0, _assertions.isUndefined)(attribute.defaultValue)) defaultValue = attribute.defaultValue;
-
-    if (attribute.coerce !== coerce) coerce = attribute.coerce;
-  }
+  // if (attribute) {
+  //
+  //   assert(Attribute.isAttribute(attribute), `'attribute' is not an Attribute object`);
+  //
+  //   if (isUndefined(defaultValue) && !isUndefined(attribute.defaultValue))
+  //     defaultValue = attribute.defaultValue;
+  //
+  //   if (attribute.coerce !== coerce)
+  //     coerce = attribute.coerce;
+  //
+  // }
 
   return Object.freeze(Object.assign(property, {
     name: name,
-    attribute: attribute,
     coerce: coerce,
-    defaultValue: defaultValue,
-    isPartOfState: isPartOfState
+    defaultValue: defaultValue
   }));
 };
 
@@ -11132,6 +11194,10 @@ var _assertions = __webpack_require__("../../node_modules/pwet/src/assertions.js
 
 var _utilities = __webpack_require__("../../node_modules/pwet/src/utilities.js");
 
+var _stateful = __webpack_require__("../../node_modules/pwet/src/decorators/stateful.js");
+
+var _stateful2 = _interopRequireDefault(_stateful);
+
 var _utils = __webpack_require__("../../node_modules/zwip/src/utils.js");
 
 var _incrementalDom = __webpack_require__("../../node_modules/incremental-dom/dist/incremental-dom-cjs.js");
@@ -11170,7 +11236,7 @@ internal.Player = function (component) {
   var element = component.element;
 
 
-  console.log('ZwipPlayer()');
+  console.log('ZwipPlayer()', component, element);
 
   var _loaded = false;
   var _animation = false;
@@ -11304,6 +11370,8 @@ internal.Player = function (component) {
 
   return { render: render };
 };
+
+internal.Player.create = _stateful2.default;
 
 internal.Player.tagName = 'zwip-player';
 
