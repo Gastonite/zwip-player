@@ -1,6 +1,6 @@
 {
   "name": "zwip-player",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "main": "src/zwip-player.js",
   "repository": "https://github.com/Gastonite/zwip-player",
   "author": "Clément Pasquier <clement@n00sphere.net>",
