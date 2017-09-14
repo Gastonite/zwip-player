@@ -1,22 +1,47 @@
 # zwip-player
 
-A [Pwet](https://github.com/Gastonite/zwip) component to play with [Zwip](https://github.com/Gastonite/zwip) animations
+A [Pwet](https://github.com/Gastonite/pwet) component to play with [Zwip](https://github.com/Gastonite/zwip) animations
  
-### Show example
+## To see examples
 
-show the already builded example:
-
-```examples/simple/build/index.html```
-
-
-### Build example using webpack-dev-server
-
+To show it in action :
+1. clone the repo :
 ```
-npm i && npm run demo
+git clone https://github.com/Gastonite/zwip-player
 ```
+2. Install **zwip-player** dependencies:
 
-or, with yarn:
+- if you are using yarn :
+  ```
+  yarn
+  ```
+- if you are using npm :
+  ```
+  npm i
+  ```
+3. After dependences are installed, go to one example directory :
 ```
-yarn && yarn demo
+cd examples/<example-name>
 ```
+4. install example dependencies and run **dev** npm script:
+- if you are using yarn :
+  ```
+  yarn && yarn dev
+  ```
+- if you are using npm :
+  ```
+  npm i && npm run dev
+  ```
+
 Now the demo is visible at [http://localhost:3000](http://localhost:3000)
+
+
+## Installation
+- if you are using yarn :
+  ```
+  yarn add -D zwip-player
+  ```
+- if you are using npm :
+  ```
+  npm i -D zwip-player
+  ```

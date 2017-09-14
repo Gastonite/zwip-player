@@ -1,13 +1,12 @@
-import { Animation, Loop } from 'zwip';
+import { Animation, Zwip } from 'zwip';
 import { object } from 'pwet/src/attribute';
-import { renderElement, renderStyle, renderStrong, renderH3, renderPre, renderDiv, renderButton } from 'idom-util';
-import { assert } from 'pwet/src/assertions';
+import { renderElement, renderStyle, renderStrong, renderHeading, renderPre, renderDiv, renderButton } from 'idom-util';
+import { assert } from 'kwak';
 import { noop } from 'pwet/src/utilities';
 import StatefulComponent from 'pwet/src/decorators/stateful';
 import { isAnimation } from 'zwip/src/utils';
 import { patch, text, skipNode } from 'incremental-dom';
 
-import style from '!css-loader!stylus-loader!./zwip-player.styl';
 
 
 const internal = {};
@@ -31,7 +30,7 @@ internal.renderObject = (object = {}) => {
   });
 };
 
-internal.Player = (component) => {
+internal.ZwipPlayer = (component) => {
 
   const { element } = component;
 
@@ -44,14 +43,14 @@ internal.Player = (component) => {
   let _pauseAnimation = noop;
   let _stopAnimation = noop;
 
-  let _isLoopStarted = false;
+  let _isZwipStarted = false;
   let _isAnimationStarted = false;
 
-  const _updateLoopState = () => {
+  const _updateZwipState = () => {
 
     const { state } = component;
 
-    const loopState = Loop.state;
+    const loopState = Zwip.state;
 
     if (loopState.fps)
       loopState.fps = Math.round(loopState.fps * 1000) / 1000;
@@ -89,27 +88,27 @@ internal.Player = (component) => {
     _animation.on('stop', () => _isAnimationStarted = false);
     _animation.on('start', () => _isAnimationStarted = true);
 
-    Loop.on('start', () => _isLoopStarted = true);
-    Loop.on('stop', () => _isLoopStarted = _isAnimationStarted = false);
-    Loop.on(['pause', 'stop', 'tick'], _updateLoopState);
-    Loop.on('tick', () => _isLoopStarted = true);
+    Zwip.on('start', () => _isZwipStarted = true);
+    Zwip.on('stop', () => _isZwipStarted = _isAnimationStarted = false);
+    Zwip.on(['pause', 'stop', 'tick'], _updateZwipState);
+    Zwip.on('tick', () => _isZwipStarted = true);
 
-    _updateLoopState();
+    _updateZwipState();
   });
 
   _observer.observe(element, { childList: true, subtree: true });
 
   const render = () => {
 
-    const { state, properties, isRendered } = component;
-    const { renderScene } = properties;
+    const { state, element, isRendered } = component;
+    const { renderScene } = element.properties;
     const { loopState, animationState } = state;
 
     console.log('ZwipPlayer.render()');
 
     patch(element, () => {
 
-      renderStyle(style.toString());
+      renderStyle(internal.ZwipPlayer.style.toString());
 
       renderDiv(null, null, 'class', 'left', () => {
         renderDiv(null, null, 'class', 'scene', () => {
@@ -129,15 +128,15 @@ internal.Player = (component) => {
 
       renderDiv(null, null, 'class', 'right', () => {
         renderElement('div', null, null, () => {
-          renderH3(text.bind(null, 'Loop state:'));
+          renderHeading(3, text.bind(null, 'Zwip state:'));
           internal.renderObject(loopState);
-          renderH3(text.bind(null, 'Animation state:'));
+          renderHeading(3, text.bind(null, 'Animation state:'));
           internal.renderObject(animationState);
         });
         renderDiv(null, null, 'class', 'toolbar', () => {
-          internal.renderControl('▶', Loop.start, !_isLoopStarted);
-          internal.renderControl('▮▮', Loop.pause, _isLoopStarted);
-          internal.renderControl('◼', Loop.stop, _isLoopStarted);
+          internal.renderControl('▶', Zwip.start, !_isZwipStarted);
+          internal.renderControl('▮▮', Zwip.pause, _isZwipStarted);
+          internal.renderControl('◼', Zwip.stop, _isZwipStarted);
         })
       });
     });
@@ -146,18 +145,19 @@ internal.Player = (component) => {
   return { render };
 };
 
-internal.Player.create = StatefulComponent;
 
-internal.Player.tagName = 'zwip-player';
+internal.ZwipPlayer.decorators = [StatefulComponent];
 
-internal.Player.shadowRoot = false;
+internal.ZwipPlayer.tagName = 'zwip-player';
 
-internal.Player.initialState = {
+internal.ZwipPlayer.shadowRoot = false;
+
+internal.ZwipPlayer.initialState = {
   animationState: {},
   loopState: {},
 };
 
-internal.Player.properties = {
+internal.ZwipPlayer.properties = {
   makeAnimation(scene) {
 
     const title = scene.firstChild;
@@ -179,4 +179,4 @@ internal.Player.properties = {
   }
 };
 
-export default internal.Player;
+export default internal.ZwipPlayer;
