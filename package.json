@@ -10,7 +10,7 @@
     "babel-plugin-transform-export-extensions": "^6.22.0",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
-    "idom-util": "^1.0.0",
+    "idom-util": "^1.0.2",
     "kwak": "^2.0.1",
     "pwet": "^1.4.3",
     "zwip": "^1.2.3"

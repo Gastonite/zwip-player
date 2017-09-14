@@ -554,7 +554,7 @@ has@^1.0.1:
   dependencies:
     function-bind "^1.0.2"
 
-idom-util@^1.0.0:
+idom-util@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/idom-util/-/idom-util-1.0.2.tgz#ca8de57669006e2921102758b3548b53dddeae72"
   dependencies:
