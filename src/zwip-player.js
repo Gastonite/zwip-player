@@ -69,6 +69,12 @@ internal.ZwipPlayer = (component) => {
     });
   };
 
+  Zwip.on('start', () => _isZwipStarted = true);
+  Zwip.on('stop', () => _isZwipStarted = _isAnimationStarted = false);
+  Zwip.on(['pause', 'stop', 'tick'], _updateZwipState);
+  Zwip.on('tick', () => _isZwipStarted = true);
+
+
   const _observer = new MutationObserver(() => {
 
     if (_loaded)
@@ -87,11 +93,6 @@ internal.ZwipPlayer = (component) => {
 
     _animation.on('stop', () => _isAnimationStarted = false);
     _animation.on('start', () => _isAnimationStarted = true);
-
-    Zwip.on('start', () => _isZwipStarted = true);
-    Zwip.on('stop', () => _isZwipStarted = _isAnimationStarted = false);
-    Zwip.on(['pause', 'stop', 'tick'], _updateZwipState);
-    Zwip.on('tick', () => _isZwipStarted = true);
 
     _updateZwipState();
   });
